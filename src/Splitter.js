@@ -1,10 +1,17 @@
-
+import EventEmmiter from './EventEmmiter.js'
 
 class Splitter extends EventEmmiter{
 
 	constructor(){
 		super();
-		this.element = $('<div>');
+
+		this.parent = parent;
+
+		this.element = $('<div>',{class:'splitter'});
 
 	}
+
+
 }
+
+module.exports = Splitter;

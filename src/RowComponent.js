@@ -1,4 +1,5 @@
 import SplitterComponent from './SplitterComponent.js';
+import VerticalSplitter from './VerticalSplitter.js';
 
 class RowComponent extends SplitterComponent{
 
@@ -10,6 +11,10 @@ class RowComponent extends SplitterComponent{
 
 	_getWidthOf(component){
 		return this.width * this.ratios[this.children.indexOf(component)];
+	}
+
+	_createSplitter(){
+		return new VerticalSplitter(this);
 	}
 
 }

@@ -1,4 +1,5 @@
 import SplitterComponent from './SplitterComponent.js';
+import HorizontalSplitter from './HorizontalSplitter.js';
 
 class ColumnComponent extends SplitterComponent{
 
@@ -10,6 +11,10 @@ class ColumnComponent extends SplitterComponent{
 
 	_getHeightOf(component){
 		return this.height * this.ratios[this.children.indexOf(component)];
+	}
+
+	_createSplitter(){
+		return new HorizontalSplitter(this);
 	}
 
 }

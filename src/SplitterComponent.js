@@ -9,7 +9,9 @@ class SplitterComponent extends LayoutComponent {
 		this.children = [];
 		this.ratios = [];
 
-		this.element.addClass('splitter');
+		this._splitters = [];
+
+		//this.element.addClass('splitter');
 		//this.element.css({width:'100%',height:'100%'})
 		
 	}
@@ -19,12 +21,22 @@ class SplitterComponent extends LayoutComponent {
 		component.parent = this;
 		if(!index){
 			this.children.push(component);
-			//this.element.append(splitter);
 			this.element.append(component.element);
 		}else{
 			this.children.splice(index,0,component);
 			//this.children[index-1].element.after(splitter)
 			this.children[index-1].element.after(this.element);
+		}
+
+		if(this.children.length > 1){
+			var splitter = this._createSplitter();
+			this._splitters.push(splitter);
+			if(!index){
+				this.children[this.children.length-1].element.before(splitter.element)
+			}else{
+				this.children[index-1].element.after(splitter.element)
+			}
+		
 		}
 		
 		const newRatios = [];
@@ -49,8 +61,12 @@ class SplitterComponent extends LayoutComponent {
 	}
 
 	setRatios(ratios){
+		if(ratios.reduce((acc,val)=>acc+val) !== 1){
+			throw new Error('Sum of ratios must be equal to 1');
+		}
+
 		this.ratios = ratios;
-		console.log(ratios);
+		
 		if(this._addedToLayout){
 			this.children.forEach((child)=>{
 				child.dispatch(new Event(Event.ON_RESIZE));
@@ -72,6 +88,9 @@ class SplitterComponent extends LayoutComponent {
 			child.dispatch(new Event(Event.ON_ADDED_TO_LAYOUT));
 		})
 	}
+
+	_createSplitter(){}
+
 }
 
 module.exports = SplitterComponent;

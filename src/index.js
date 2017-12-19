@@ -1,4 +1,3 @@
-
 module.exports = {
 	ColumnComponent : require("./ColumnComponent"),
 	LayoutComponent : require("./LayoutComponent"),

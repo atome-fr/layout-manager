@@ -19,8 +19,6 @@ class LayoutComponent extends EventEmmiter {
 		this.addEventListener(Event.ON_ADDED_TO_LAYOUT, this._onAddedToLayout);
 		this.addEventListener(Event.ON_RESIZE,this.onResize);
 
-		console.log(this.listeners);
-		
 	}
 
 	get width(){
@@ -46,8 +44,11 @@ class LayoutComponent extends EventEmmiter {
 	onShow(){}
 
 	onResize(){
-		console.log("onResize")
-		this.element.css({width:this.width,height:this.height});
+		const border = parseInt(this.element.css('borderWidth'));
+		this.element.css({
+			width: this.width-(border*2),
+			height: this.height-(border*2)
+		});
 	}
 
 	onHide(){}
@@ -70,6 +71,7 @@ class LayoutComponent extends EventEmmiter {
 		this._addedToLayout = true;
 		this.dispatch(new Event(Event.ON_RESIZE));
 	}
+
 }
 
 module.exports = LayoutComponent;
