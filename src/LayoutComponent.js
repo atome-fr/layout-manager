@@ -44,10 +44,9 @@ class LayoutComponent extends EventEmmiter {
 	onShow(){}
 
 	onResize(){
-		const border = parseInt(this.element.css('borderWidth'));
 		this.element.css({
-			width: this.width-(border*2),
-			height: this.height-(border*2)
+			width: this.width+'px',
+			height: this.height+'px'
 		});
 	}
 
