@@ -9,7 +9,7 @@ class EventEmmiter {
 	}
 
 	addEventListener(type,callback){
-		if(this.listeners[type]){
+		if(!this.listeners[type]){
 			this.listeners[type] = [];
 		}
 		this.listeners[type].push(callback);
@@ -29,7 +29,9 @@ class EventEmmiter {
 	dispatch(event){
 		event.target = this;
 		if(this.listeners[event.type]){
-			this.listeners[event.type].each((cb)=>{cb(event);});
+			this.listeners[event.type].forEach((cb)=>{
+				cb.apply(this,[event]);
+			});
 		}
 	}
 

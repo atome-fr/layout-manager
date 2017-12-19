@@ -13,10 +13,12 @@ class LayoutManager {
 	}
 
 	set root(value){
-		this._root = value;ï
+		this._root = value;
 		this.parent.append(this._root.element);
 		this._root.element.css({width:'100%',height:'100%'});
 		this._root.dispatch(new Event(Event.ON_ADDED))
+		this._root.dispatch(new Event(Event.ON_ADDED_TO_LAYOUT))
+
 	}
 
 	getComponentById(id){

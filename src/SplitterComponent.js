@@ -27,16 +27,15 @@ class SplitterComponent extends LayoutComponent {
 			this.children[index-1].element.after(this.element);
 		}
 		
-		this.ratios = [];
+		const newRatios = [];
 		for(let i = 0;i<this.children.length;i++){
-			this.ratios.push(1/this.children.length);
+			newRatios.push(1/this.children.length);
 		}
+		this.setRatios(newRatios);
 		
 		component.dispatch(new Event(Event.ON_ADDED));
-		for(let i in this.children){
-			let child = this.children[i];
-			console.log(child);
-			child.element.css({width:child.width,height:child.height});
+		if(this._addedToLayout){
+			component.dispatch(new Event(Event.ON_ADDED_TO_LAYOUT));
 		}
 	}
 
@@ -50,7 +49,13 @@ class SplitterComponent extends LayoutComponent {
 	}
 
 	setRatios(ratios){
-
+		this.ratios = ratios;
+		console.log(ratios);
+		if(this._addedToLayout){
+			this.children.forEach((child)=>{
+				child.dispatch(new Event(Event.ON_RESIZE));
+			});
+		}
 	}
 
 	_getWidthOf(component){
@@ -59,6 +64,13 @@ class SplitterComponent extends LayoutComponent {
 
 	_getHeightOf(component){
 		return this.height;
+	}
+
+	_onAddedToLayout(){
+		super._onAddedToLayout();
+		this.children.forEach((child)=>{
+			child.dispatch(new Event(Event.ON_ADDED_TO_LAYOUT));
+		})
 	}
 }
 
