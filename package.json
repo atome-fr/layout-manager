@@ -28,6 +28,7 @@
     "webpack": "^2.2.1"
   },
   "scripts": {
+    "clean": "rm -rf dist lib",
     "watch": "webpack --progress --colors --watch",
     "test": "jest",
     "watch-test": "jest --watch",
@@ -35,9 +36,9 @@
     "lib": "babel src --out-dir lib -s",
     "watch-lib": "npm run lib -- --watch",
     "docs": "jsdoc -c jsdoc.json -r",
-    "preversion": "npm test",
+    "preversion": "npm run clean && npm test",
     "version": "npm run build && npm run lib",
-    "postversion": "git push && git push --tags"
+    "postversion": "npm publish && git push && git push --tags"
   },
   "author": {
     "name": "Bastien Levasseur",
