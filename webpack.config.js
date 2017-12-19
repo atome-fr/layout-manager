@@ -9,7 +9,14 @@ var options = {
     entry: './src',
     output: {
         path: path.resolve(__dirname,'dist'),
-        filename: projectName+'.js'
+        filename: projectName+'.js',
+        libraryTarget: 'umd',
+        library: "LayoutManager"
+    },
+    externals: {
+        // require("jquery") is external and available
+        //  on the global var jQuery
+        "jquery": "jQuery"
     },
     module: {
         rules: [
@@ -27,10 +34,6 @@ var options = {
         ]
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery"
-        }),
         new webpack.optimize.UglifyJsPlugin({minimize: true})
     ]
 };
