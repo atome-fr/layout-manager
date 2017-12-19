@@ -1,0 +1,44 @@
+import Event from './Event.js';
+
+class LayoutManager {
+
+
+	constructor(parent){
+		this.parent = parent;
+	}
+
+
+	get root(){
+		return this._root;
+	}
+
+	set root(value){
+		this._root = value;ï
+		this.parent.append(this._root.element);
+		this._root.element.css({width:'100%',height:'100%'});
+		this._root.dispatch(new Event(Event.ON_ADDED))
+	}
+
+	getComponentById(id){
+		const getComponentByIdFrom = (lc,id) => {
+			if (lc.id === id){
+				return lc;
+			}else{	
+				if(lc.children){
+					for(let child in lc.children){
+						const ret =	getComponentByIdFrom(child,id);
+						if(ret){
+							return ret;
+						}
+					}
+				}
+			}
+			return null;
+		};
+
+		return getComponentByIdFrom(this._root,id);
+
+	}
+}
+
+module.exports = LayoutManager;
