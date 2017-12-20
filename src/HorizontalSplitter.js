@@ -5,8 +5,7 @@ class HorizontalSplitter extends Splitter {
 
 	constructor(parent){
 		super(parent);
-		this.element.addClass('horizontal');
-		this.element.css({width:'100%',height:'10px'});
+		this.element.addClass('splitter horizontal');
 	}
 }
 

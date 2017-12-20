@@ -5,7 +5,6 @@ class RowComponent extends SplitterComponent{
 
 	constructor(id){
 		super(id);
-
 		this.element.addClass('row');
 	}
 

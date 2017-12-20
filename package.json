@@ -45,6 +45,7 @@
     "email": "bastien.levasseur@atome.io"
   },
   "main": "./lib/index.js",
+  "style": "./css/layout.css",
   "files": [
     "dist/",
     "lib/",
