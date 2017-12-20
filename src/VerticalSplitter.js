@@ -5,6 +5,7 @@ class VerticalSplitter extends Splitter {
 
 	constructor(parent){
 		super(parent);
+		this.element.addClass('vertical');
 		this.element.css({width:'10px',height:'100%'});
 	}
 }

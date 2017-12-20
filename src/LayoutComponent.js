@@ -14,6 +14,7 @@ class LayoutComponent extends EventEmmiter {
 		this.id = id;
 
 		this.element = $('<div>',{id:this.id});
+		this.element.addClass("component")
 
 		//this.addEventListener(Event.ON_ADDED,this.onShow);
 		this.addEventListener(Event.ON_ADDED_TO_LAYOUT, this._onAddedToLayout);

@@ -24,7 +24,6 @@ class SplitterComponent extends LayoutComponent {
 			this.element.append(component.element);
 		}else{
 			this.children.splice(index,0,component);
-			//this.children[index-1].element.after(splitter)
 			this.children[index-1].element.after(this.element);
 		}
 
