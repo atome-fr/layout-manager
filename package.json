@@ -9,7 +9,6 @@
     }
   ],
   "dependencies": {
-    "jquery": "^2.2.4",
     "jquery-touch-events": "git+https://github.com/atome-fr/jQuery-Touch-Events.git"
   },
   "devDependencies": {
@@ -26,6 +25,9 @@
     "semver": "^5.3.0",
     "version": "^0.1.2",
     "webpack": "^2.2.1"
+  },
+  "peerDependencies": {
+      "jquery": "^2.2.4"
   },
   "scripts": {
     "clean": "rm -rf dist lib",
