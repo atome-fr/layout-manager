@@ -51,6 +51,7 @@
   "files": [
     "dist/",
     "lib/",
+    "css/",
     "package.json",
     "README.md"
   ],
