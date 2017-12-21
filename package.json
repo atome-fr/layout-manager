@@ -1,6 +1,6 @@
 {
   "name": "layout-manager",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generic library to manage the layout.",
   "maintainers": [
     {
@@ -27,7 +27,7 @@
     "webpack": "^2.2.1"
   },
   "peerDependencies": {
-      "jquery": "^2.2.4"
+    "jquery": "^2.2.4"
   },
   "scripts": {
     "clean": "rm -rf dist lib",
