@@ -2,10 +2,13 @@ import Splitter from './splitter.js';
 
 class HorizontalSplitter extends Splitter {
 	
-
+	/**
+	* Create an horizontal spliter with the right classes for the DOM element
+	* @param parent [LayoutComponent] The component that create the splitter 
+	*/
 	constructor(parent){
 		super(parent);
-		this.element.addClass('splitter horizontal');
+		this.element.addClass('horizontal');
 	}
 }
 
