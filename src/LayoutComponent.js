@@ -19,6 +19,8 @@ class LayoutComponent extends EventDispatcher {
 		this.element = $('<div>',{id:this.id});
 		this.element.addClass("component");
 
+		this._visible = false;
+
 		this.addEventListener(Event.ON_ADDED_TO_LAYOUT, this._onAddedToLayout);
 		
 		this.addEventListener(Event.ON_ADDED,this.onShow);
@@ -50,6 +52,14 @@ class LayoutComponent extends EventDispatcher {
 		}else{
 			return this.element.height();
 		}
+	}
+
+	/**
+	* Getter of the visibility of the component
+	* @return [Boolean] The visibility of the component
+	*/
+	get visible(){
+		return this._visible;
 	}
 
 	/**

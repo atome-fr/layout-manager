@@ -57,10 +57,12 @@ class SplitterComponent extends LayoutComponent {
 		}
 		this.setRatios(newRatios);
 		
+		component._visible = true;
 		component.dispatch(new Event(Event.ON_ADDED));
 		if(this._addedToLayout){
 			component.dispatch(new Event(Event.ON_ADDED_TO_LAYOUT));
 		}
+
 	}
 
 	/**
@@ -85,6 +87,7 @@ class SplitterComponent extends LayoutComponent {
 			}
 			this.setRatios(nRatios);
 
+			component._visible = false;
 			component.dispatch(new Event(Event.ON_REMOVE));
 		}
 	}
