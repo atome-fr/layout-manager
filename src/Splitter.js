@@ -17,25 +17,23 @@ class Splitter extends EventDispatcher{
 		this.interaction.on('tapstart',this._onTapStart.bind(this));
 		this.element.append(this.interaction);
 	}
-/*
+
+	/**
+	* Getter of the width of the splitter
+	* @return [Float] The width of the splitter
+	*/
 	get width(){
 		return this.element.width();
 	}
 
-	set width(value){
-		this.element.css({width:value});
-		this.interaction.css({width:value});
-	}
-
+	/**
+	* Getter of the height of the splitter
+	* @return [Float] The height of the splitter
+	*/
 	get height(){
 		return this.element.height();
 	}
-	
-	set height(value){
-		this.element.css({height:value});
-		this.interaction.css({height:value});
-	}
-*/
+
 	/**
 	* Listener of the begining of a drag of the splitter
 	*/
