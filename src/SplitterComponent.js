@@ -103,7 +103,7 @@ class SplitterComponent extends LayoutComponent {
 		
 		if(this._addedToLayout){
 			this.children.forEach((child)=>{
-				child.dispatch(new Event(Event.ON_ADDED_TO_LAYOUT));
+				child._updateSize();
 			});
 		}
 	}

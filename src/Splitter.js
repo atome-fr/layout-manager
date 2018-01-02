@@ -37,18 +37,20 @@ class Splitter extends EventDispatcher{
 	/**
 	* Listener of the begining of a drag of the splitter
 	*/
-	_onTapStart(evt){
+	_onTapStart(evt,touchData){
+		evt.preventDefault();
 		this.parent.element.on('tapmove',this._onTapMove.bind(this));
 		this.parent.element.on('tapend',this._onTapEnd.bind(this));
-		this.mousePos = {x:evt.clientX,y:evt.clientY};
+		this.mousePos = {x:touchData.position.x,y:touchData.position.y};
 	}
 
 	/**
 	* Listener to get movement of the finger or the mouse
 	*/
-	_onTapMove(evt){
-		const offset = {x : evt.clientX - this.mousePos.x, y : evt.clientY - this.mousePos.y};
-		this.mousePos = {x:evt.clientX,y:evt.clientY};
+	_onTapMove(evt,touchData){
+		evt.preventDefault();
+		const offset = {x : touchData.position.x - this.mousePos.x, y : touchData.position.y - this.mousePos.y};
+		this.mousePos = {x: touchData.position.x,y: touchData.position.y};
 		this.dispatch(new Event(Event.ON_DRAG,offset));
 	}
 
