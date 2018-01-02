@@ -1,0 +1,72 @@
+<html>
+<head>
+	<link rel="stylesheet" href="../css/layout.css" type="text/css">
+	<script src='../node_modules/jquery/dist/jquery.js' type="text/javascript"></script>
+	<script src='../dist/layout-manager.js' type="text/javascript"></script>
+	<script type="text/javascript">
+	$(document).ready(function () {
+		var lm = new LayoutManager.LayoutManager($("#stage"));
+		
+		const row = new LayoutManager.RowComponent('row');
+		const col = new LayoutManager.ColumnComponent('col');
+		
+		lm.root = row;
+		const comp1 = new LayoutManager.LayoutComponent('view1');
+		const comp2 = new LayoutManager.LayoutComponent('view2');
+		const comp3 = new LayoutManager.LayoutComponent('view3');
+		const comp4 = new LayoutManager.LayoutComponent('view4');
+
+
+		$("#closeCmp1").click(function(ev) {
+			comp1.hide();
+		});
+		$("#openCmp1").click(function(ev) {
+			comp1.show();
+		});
+
+		$("#closeCmp2").click(function(ev) {
+			comp2.hide();
+		});
+		$("#openCmp2").click(function(ev) {
+			comp2.show();
+		});
+
+		$("#closeCmp3").click(function(ev) {
+			comp3.hide();
+		});
+		$("#openCmp3").click(function(ev) {
+			comp3.show();
+		});
+		
+		$("#closeCmp4").click(function(ev) {
+			comp4.hide();
+		});
+		$("#openCmp4").click(function(ev) {
+			comp4.show();
+		});
+
+		comp1.element.html("<h2>Component 1</h2>");
+		comp2.element.html("<h2>Component 2</h2>");
+		comp3.element.html("<h2>Component 3</h2>");
+		comp4.element.html("<h2>Component 4</h2>");
+
+		row.addComponent(col);
+		row.addComponent(comp1);
+		col.addComponent(comp2);
+		col.addComponent(comp3);
+		col.addComponent(comp4);
+	});
+	</script>
+</head>
+<body style="margin:0">
+	<button id="closeCmp1">Close component 1!</button>
+	<button id="openCmp1">Open component 1!</button><br/>
+	<button id="closeCmp2">Close component 2!</button>
+	<button id="openCmp2">Open component 2!</button><br/>
+	<button id="closeCmp3">Close component 3!</button>
+	<button id="openCmp3">Open component 3!</button><br/>
+	<button id="closeCmp4">Close component 4!</button>
+	<button id="openCmp4">Open component 4!</button>
+	<div id='stage'></div>		
+</body>
+</html>
