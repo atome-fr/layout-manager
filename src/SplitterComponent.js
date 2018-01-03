@@ -102,12 +102,15 @@ class SplitterComponent extends LayoutComponent {
 			throw new Error('Sum of ratios must be equal to 1 ('+sumRatios+')');
 		}
 
+		const oldRatios = this.ratios;
 		this.ratios = ratios;
 		
 		if(this._addedToLayout){
-			this.children.forEach((child)=>{
-				child._updateSize();
-			});
+			for(let i=0;i<this.children.length;i++){
+				if(oldRatios[i] !== this.ratios[i]){
+					this.children[i]._updateSize();
+				} 
+			}
 		}
 	}
 

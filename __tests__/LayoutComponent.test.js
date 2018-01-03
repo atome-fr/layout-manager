@@ -12,7 +12,7 @@ describe('LayoutComponent', () => {
     describe("#width",()=>{
 
     	test("if the component is the root",()=>{
-    		var c = new LayoutComponent();
+    		const c = new LayoutComponent();
     		c.element = {
     			innerWidth : jest.fn(()=>234)
     		};
@@ -23,10 +23,10 @@ describe('LayoutComponent', () => {
     	});
 
     	test("if the component is not the root",()=>{
-    		var p = new LayoutComponent('p');
+    		const p = new LayoutComponent('p');
     		p._getWidthOf = jest.fn(()=>789);
 
-    		var c = new LayoutComponent('c');
+    		const c = new LayoutComponent('c');
     		c.parent = p;
 
     		expect(c.width).toEqual(789);
@@ -39,7 +39,7 @@ describe('LayoutComponent', () => {
     describe("#height",()=>{
 
     	test("if the component is the root",()=>{
-    		var c = new LayoutComponent();
+    		const c = new LayoutComponent();
     		c.element = {
     			innerHeight : jest.fn(()=>123)
     		};
@@ -50,10 +50,10 @@ describe('LayoutComponent', () => {
     	});
 
     	test("if the component is not the root",()=>{
-    		var p = new LayoutComponent('p');
+    		const p = new LayoutComponent('p');
     		p._getHeightOf = jest.fn(()=>456);
 
-    		var c = new LayoutComponent('c');
+    		const c = new LayoutComponent('c');
     		c.parent = p;
 
     		expect(c.height).toEqual(456);
@@ -62,5 +62,19 @@ describe('LayoutComponent', () => {
     	});
 
     })
+
+    test("#updateSize",()=>{
+    	const c = new LayoutComponent("c");
+    	c.element = {css:jest.fn()};
+    	const resizeCB = jest.fn();
+    	c.addEventListener('onResize',resizeCB);
+
+    	c._updateSize({x:15,y:65});
+
+    	expect(c.element.css).toHaveBeenCalledWith({width:'15px',height:'65px'});
+    	expect(resizeCB).toHaveBeenCalledTimes(1);
+    });
+    
+
     
 });
