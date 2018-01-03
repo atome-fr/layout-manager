@@ -66,7 +66,7 @@ class LayoutManager {
 			const nSize = {x:width, y:height};
 			this._root._updateSize(nSize);
 		}else{
-			thgis.parent.css({width:width,height:height});
+			this.parent.css({width:width,height:height});
 		}	
 	}
 }

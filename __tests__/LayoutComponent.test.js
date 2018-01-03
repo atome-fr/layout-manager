@@ -35,5 +35,32 @@ describe('LayoutComponent', () => {
     	});
 
     })
+
+    describe("#height",()=>{
+
+    	test("if the component is the root",()=>{
+    		var c = new LayoutComponent();
+    		c.element = {
+    			innerHeight : jest.fn(()=>123)
+    		};
+
+
+    		expect(c.height).toEqual(123);
+
+    	});
+
+    	test("if the component is not the root",()=>{
+    		var p = new LayoutComponent('p');
+    		p._getHeightOf = jest.fn(()=>456);
+
+    		var c = new LayoutComponent('c');
+    		c.parent = p;
+
+    		expect(c.height).toEqual(456);
+    		expect(p._getHeightOf).toBeCalledWith(c);
+
+    	});
+
+    })
     
 });
