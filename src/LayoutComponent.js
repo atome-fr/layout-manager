@@ -38,7 +38,7 @@ class LayoutComponent extends EventDispatcher {
 		if(this.parent){
 			return this.parent._getWidthOf(this);
 		}else{
-			return this.element.width();
+			return this.element.innerWidth();
 		}
 	}
 
@@ -50,7 +50,7 @@ class LayoutComponent extends EventDispatcher {
 		if(this.parent){
 			return this.parent._getHeightOf(this);
 		}else{
-			return this.element.height();
+			return this.element.innerHeight();
 		}
 	}
 

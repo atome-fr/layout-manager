@@ -28,13 +28,6 @@ class LayoutManager {
 		this._root.dispatch(new Event(Event.ON_ADDED));
 		this._root.dispatch(new Event(Event.ON_ADDED_TO_LAYOUT));
 		this.parent.css({overflow:'hidden'});
-
-		$(window).on('resize',()=>{
-			const nSize = {x:this.parent.innerWidth(),y:this.parent.innerHeight()};
-			this._root._updateSize(nSize);	
-		
-		});
-
 	} 
 	
 	/**
@@ -61,7 +54,20 @@ class LayoutManager {
 		};
 
 		return getComponentByIdFrom(this._root,id);
+	}
 
+	/**
+	* Update the size of the layout
+	* @param width [Float] the new width of the layout
+	* @param height [Float] the new height of the layout
+	*/
+	updateSize(width,height){
+		if(this._root){
+			const nSize = {x:width, y:height};
+			this._root._updateSize(nSize);
+		}else{
+			thgis.parent.css({width:width,height:height});
+		}	
 	}
 }
 
