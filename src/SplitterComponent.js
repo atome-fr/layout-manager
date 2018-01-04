@@ -102,7 +102,9 @@ class SplitterComponent extends LayoutComponent {
 	_updateSize(nSize){
 		super._updateSize(nSize);
 		this.children.forEach((child)=>{
-			child._updateSize();
+			if(child.visible){
+				child._updateSize();
+			}
 		});
 	}
 
