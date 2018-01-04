@@ -16,6 +16,8 @@
     -moz-box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.52);
     -ms-box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.52);
     -o-box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.52);
+    z-index: 1;
+    position: relative;
 }
 .splitter.horizontal {
     width: 100%;
@@ -41,5 +43,7 @@
 }
 
 .component {
-    background-color: rgba(54, 63, 64, 1);;
+    background-color: rgba(54, 63, 64, 1);
+    position: relative;
+    overflow: hidden;
 }
