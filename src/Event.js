@@ -16,9 +16,11 @@ class Event {
 
 }
 
-Event.ON_ADDED = "onAdded";
 Event.ON_ADDED_TO_LAYOUT = "onAddedToLayout";
+Event.ON_ADDED = "onAdded";
+Event.ON_SHOW = "onShow";
 Event.ON_RESIZE = "onResize";
+Event.ON_HIDE = "onHide";
 Event.ON_REMOVE = "onRemove";
 
 Event.ON_DRAG = "onDrag";

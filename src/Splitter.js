@@ -10,6 +10,7 @@ class Splitter extends EventDispatcher{
 	constructor(parent){
 		super();
 
+		this.visible = false;
 		this.parent = parent;
 
 		this.element = $('<div>',{class:'splitter'});

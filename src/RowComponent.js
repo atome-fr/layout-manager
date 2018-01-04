@@ -18,8 +18,8 @@ class RowComponent extends SplitterComponent{
 	* @return [Float] The width of the children
 	*/
 	_getWidthOf(component){
-		var splittersWidth = this._splitters.reduce((acc,val)=>{return acc + val.width;},0);
-		return (this.width-splittersWidth) * this.ratios[this.children.indexOf(component)];
+		const splittersWidth = this._splitters.reduce((acc,val)=>{return acc + val.width;},0);
+		return (this.width-splittersWidth) * this.ratios[this.children.filter((c)=>c.visible).indexOf(component)];
 	}
 
 	/**
@@ -27,7 +27,7 @@ class RowComponent extends SplitterComponent{
 	* @return [Splitter] The splitter that will be added to the component
 	*/
 	_createSplitter(){
-		var splitter = new VerticalSplitter(this);
+		const splitter = new VerticalSplitter(this);
 		return splitter;
 	}
 	
@@ -36,7 +36,7 @@ class RowComponent extends SplitterComponent{
 	* @param evt [Event] The event dispatched when the splitter is dragged
 	*/
 	_onSplitterDrag(evt){
-		var splittersWidth = this._splitters.reduce((acc,val)=>{return acc + val.width;},0);
+		const splittersWidth = this._splitters.reduce((acc,val)=>{return acc + val.width;},0);
 		const ratioOffset = (evt.params.x / (this.width-splittersWidth));
 		const i = this._splitters.indexOf(evt.target);
 

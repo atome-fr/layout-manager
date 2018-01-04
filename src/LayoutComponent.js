@@ -23,9 +23,11 @@ class LayoutComponent extends EventDispatcher {
 
 		this.addEventListener(Event.ON_ADDED_TO_LAYOUT, this._onAddedToLayout);
 		
-		this.addEventListener(Event.ON_ADDED,this.onShow);
+		this.addEventListener(Event.ON_ADDED,this.onAdded);
+		this.addEventListener(Event.ON_SHOW,this.onShow);
 		this.addEventListener(Event.ON_RESIZE,this.onResize);
-		this.addEventListener(Event.ON_REMOVE,this.onHide);
+		this.addEventListener(Event.ON_HIDE,this.onHide);
+		this.addEventListener(Event.ON_REMOVE,this.onRemove);
 	
 
 	}
@@ -62,23 +64,40 @@ class LayoutComponent extends EventDispatcher {
 		return this._visible;
 	}
 
+	set visible(value){
+		if(this._visible !== value){
+			this._visible = value;
+			if(this.parent){
+				if(value){
+					this.parent._showComponent(this);
+				}else{
+					this.parent._hideComponent(this);
+				}
+			}
+		}
+	}
+
 	/**
 	* Show the component
 	*/
 	show(){
-		this.parent.addComponent(this,this._hiddenIndex);
+		this.visible = true;
 	}
 
 	/**
 	* Hide the compoenent
 	*/
 	hide(){
-		this._hiddenIndex = this.parent.children.indexOf(this);
-		this.parent.removeComponent(this);
+		this.visible=false;
 	}
 
 	/**
-	* Call when the component is added to the scene
+	* Call when the component is added to a component
+	*/
+	onAdded(){}
+
+	/**
+	* Call when the component is shown
 	*/
 	onShow(){}
 
@@ -93,6 +112,11 @@ class LayoutComponent extends EventDispatcher {
 	onHide(){}
 
 	/**
+	* Call when the component is from his parent
+	*/
+	onRemove(){}
+
+	/**
 	* Call it to get an object that describe the current state of the component
 	*/
 	saveState(){}
@@ -101,25 +125,6 @@ class LayoutComponent extends EventDispatcher {
 	* Call it to load the state of the component
 	*/
 	loadState(){}
-
-
-	/**
-	* Get the width of a children of the component
-	* @param component [LayoutComponent] The children of the component
-	* @return [Float] The width of the children
-	*/
-	_getWidthOf(){
-		throw(new Error('Abstract method, use it on container components'));
-	}
-
-	/**
-	* Get the height of a children of the component
-	* @param component [LayoutComponent] The children of the component
-	* @return [Float] The height of the children
-	*/
-	_getHeightOf(){
-		throw(new Error('Abstract method, use it on container components'));
-	}
 
 	/**
 	* Update the size of the component
@@ -148,7 +153,40 @@ class LayoutComponent extends EventDispatcher {
 	_onAddedToLayout(){
 		this._addedToLayout = true;
 		this._updateSize();
+		
 	}
+
+	/**
+	*		CONTAINER METHODS
+	**/
+
+	/**
+	* Get the width of a children of the component
+	* @param component [LayoutComponent] The children of the component
+	* @return [Float] The width of the children
+	*/
+	_getWidthOf(){
+		throw(new Error('Abstract method, use it on container components'));
+	}
+
+	/**
+	* Get the height of a children of the component
+	* @param component [LayoutComponent] The children of the component
+	* @return [Float] The height of the children
+	*/
+	_getHeightOf(){
+		throw(new Error('Abstract method, use it on container components'));
+	}
+
+	_showComponent(){
+		throw(new Error('Abstract method, use it on container components'));
+	}
+	
+	_hideComponent(){
+		throw(new Error('Abstract method, use it on container components'));
+	}
+
+
 
 }
 

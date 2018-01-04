@@ -18,8 +18,8 @@ class ColumnComponent extends SplitterComponent{
 	* @return [Float] The height of the children
 	*/
 	_getHeightOf(component){
-		var splittersHeight = this._splitters.reduce((acc,val)=>{return acc + val.height;},0);
-		return (this.height-splittersHeight) * this.ratios[this.children.indexOf(component)];
+		const splittersHeight = this._splitters.reduce((acc,val)=>{return acc + val.height;},0);
+		return (this.height-splittersHeight) * this.ratios[this.children.filter((c)=>c.visible).indexOf(component)];
 	}
 
 	/**
@@ -27,7 +27,7 @@ class ColumnComponent extends SplitterComponent{
 	* @return [Splitter] The splitter that will be added to the component
 	*/
 	_createSplitter(){
-		var splitter =  new HorizontalSplitter(this);
+		const splitter =  new HorizontalSplitter(this);
 		return splitter;
 	}
 
@@ -36,7 +36,7 @@ class ColumnComponent extends SplitterComponent{
 	* @param evt [Event] The event dispatched when the splitter is dragged
 	*/
 	_onSplitterDrag(evt){
-		var splittersHeight = this._splitters.reduce((acc,val)=>{return acc + val.height;},0);
+		const splittersHeight = this._splitters.reduce((acc,val)=>{return acc + val.height;},0);
 		const ratioOffset = (evt.params.y / (this.height-splittersHeight));
 		const i = this._splitters.indexOf(evt.target);
 
