@@ -40,8 +40,9 @@ class Splitter extends EventDispatcher{
 	*/
 	_onTapStart(evt,touchData){
 		evt.preventDefault();
-		this.parent.element.on('tapmove',this._onTapMove.bind(this));
-		this.parent.element.on('tapend',this._onTapEnd.bind(this));
+
+		$(document).on('tapmove',this._onTapMove.bind(this));
+		$(document).on('tapend',this._onTapEnd.bind(this));
 		this.mousePos = {x:touchData.position.x,y:touchData.position.y};
 	}
 
@@ -59,8 +60,8 @@ class Splitter extends EventDispatcher{
 	* Listener to get the end of the dragging of a splitter
 	*/ 
 	_onTapEnd(){
-		this.parent.element.off('tapmove');
-		this.parent.element.off('tapend');
+		$(document).off('tapmove');
+		$(document).off('tapend');
 		this.dispatch(new Event(Event.ON_DROP));
 	}
 
