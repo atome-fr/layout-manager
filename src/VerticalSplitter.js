@@ -1,4 +1,4 @@
-import Splitter from './splitter.js';
+import Splitter from './Splitter.js';
 
 class VerticalSplitter extends Splitter {
 	

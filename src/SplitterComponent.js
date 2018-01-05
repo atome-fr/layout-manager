@@ -113,7 +113,7 @@ class SplitterComponent extends LayoutComponent {
 	*/
 	_onAddedToLayout(){
 		super._onAddedToLayout();
-		this.children.forEach((child)=>{
+		this.children.filter((c)=>c.visible).forEach((child)=>{
 			child.dispatch(new Event(Event.ON_ADDED_TO_LAYOUT));
 		});
 	}
