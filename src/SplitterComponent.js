@@ -62,7 +62,7 @@ class SplitterComponent extends LayoutComponent {
 		}
 		const sumRatios = ratios.reduce((acc,val)=>acc+val,0);
 		if(sumRatios < 0.99999 || sumRatios > 1.00001){
-			throw new Error('Sum of ratios must be equal to 1 ('+sumRatios+')');
+			return;
 		}
 
 		const oldRatios = this.ratios;
