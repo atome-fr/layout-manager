@@ -46,4 +46,5 @@
     background-color: rgba(54, 63, 64, 1);
     position: relative;
     overflow: hidden;
+    touch-action: none;
 }
