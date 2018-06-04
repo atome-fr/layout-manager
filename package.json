@@ -1,6 +1,6 @@
 {
   "name": "layout-manager",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Generic library to manage the layout.",
   "maintainers": [
     {
