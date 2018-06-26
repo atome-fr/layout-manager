@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`View Component UI Render Test should render the View component 1`] = `
+<div
+  className="component"
+/>
+`;

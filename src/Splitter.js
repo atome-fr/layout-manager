@@ -1,72 +1,80 @@
-import Event from './Event.js';
-import EventDispatcher from './EventDispatcher.js';
+import React, {Component} from 'react';
 
-class Splitter extends EventDispatcher{
+/**
+ * Class used to manage a splitter
+ * @class
+ */
+class Splitter extends Component {
 
-	/**
-	* Create a splitter
-	* @param parent [LayoutComponent] The component that create the splitter
-	*/
-	constructor(parent){
-		super();
+    /**
+     * Override constructor
+     * @param props
+     */
+    constructor(props) {
+        super(props);
 
-		this.visible = false;
-		this.parent = parent;
+        this.handleMouseOrTouchStart = this.handleMouseOrTouchStart.bind(this);
+        this.handleMouseOrTouchMove = this.handleMouseOrTouchMove.bind(this);
+        this.handleMouseOrTouchEnd = this.handleMouseOrTouchEnd.bind(this);
+    }
 
-		this.element = $('<div>',{class:'splitter'});
-		this.interaction = $('<div>',{class:'handle'});
-		this.interaction.on('tapstart',this._onTapStart.bind(this));
-		this.element.append(this.interaction);
-	}
+    /**
+     * Handler when the user start to move the splitter
+     */
+    handleMouseOrTouchStart(ev) {
+        if ((ev.clientX && ev.clientY) || (ev.touches && ev.touches.length > 0)) {
+            this.mousePos = {x: ev.clientX || ev.touches[0].clientX, y: ev.clientY || ev.touches[0].clientY};
+        }
+        document.addEventListener('mousemove', this.handleMouseOrTouchMove);
+        document.addEventListener('touchmove', this.handleMouseOrTouchMove);
+        document.addEventListener('mouseup', this.handleMouseOrTouchEnd);
+        document.addEventListener('touchend', this.handleMouseOrTouchEnd);
+    }
 
-	/**
-	* Getter of the width of the splitter
-	* @return [Float] The width of the splitter
-	*/
-	get width(){
-		return this.element.width();
-	}
+    /**
+     * Handler when the user move the splitter
+     * @param ev
+     */
+    handleMouseOrTouchMove(ev) {
+        ev.preventDefault();
 
-	/**
-	* Getter of the height of the splitter
-	* @return [Float] The height of the splitter
-	*/
-	get height(){
-		return this.element.height();
-	}
+        let newMousePos = undefined;
+        if ((ev.clientX && ev.clientY) || (ev.touches && ev.touches.length > 0)) {
+            newMousePos = {x: ev.clientX || ev.touches[0].clientX, y: ev.clientY || ev.touches[0].clientY};
+        }
 
-	/**
-	* Listener of the begining of a drag of the splitter
-	*/
-	_onTapStart(evt,touchData){
-		evt.preventDefault();
+        if(newMousePos) {
+            const offset = {x: newMousePos.x - this.mousePos.x, y: newMousePos.y - this.mousePos.y};
+            this.mousePos = newMousePos;
+            this.props.onChange(offset, this.el);
+        }
+    }
 
-		$(document).on('tapmove',this._onTapMove.bind(this));
-		$(document).on('tapend',this._onTapEnd.bind(this));
-		this.mousePos = {x:touchData.position.x,y:touchData.position.y};
-	}
+    /**
+     * Handler when the user end to move the splitter
+     */
+    handleMouseOrTouchEnd() {
+        document.removeEventListener('mousemove', this.handleMouseOrTouchMove);
+        document.removeEventListener('touchmove', this.handleMouseOrTouchMove);
+        document.removeEventListener('mouseup', this.handleMouseOrTouchEnd);
+        document.removeEventListener('touchend', this.handleMouseOrTouchEnd);
+    }
 
-	/**
-	* Listener to get movement of the finger or the mouse
-	*/
-	_onTapMove(evt,touchData){
-		evt.preventDefault();
-		const offset = {x : touchData.position.x - this.mousePos.x, y : touchData.position.y - this.mousePos.y};
-		this.mousePos = {x: touchData.position.x,y: touchData.position.y};
-		this.dispatch(new Event(Event.ON_DRAG,offset));
-	}
-
-	/**
-	* Listener to get the end of the dragging of a splitter
-	*/ 
-	_onTapEnd(){
-		$(document).off('tapmove');
-		$(document).off('tapend');
-		this.dispatch(new Event(Event.ON_DROP));
-	}
-
-
-
+    /**
+     * Method for render the components
+     * @returns {*}
+     */
+    render() {
+        return (
+            <div ref={(el) => this.el = el}
+                 className={"splitter " + this.props.type}
+                 onTouchStart={this.handleMouseOrTouchStart}
+                 onMouseDown={this.handleMouseOrTouchStart}>
+                <div className="handle">
+                </div>
+            </div>
+        );
+    }
 }
 
-module.exports = Splitter;
+export default Splitter;

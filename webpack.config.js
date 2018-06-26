@@ -1,42 +1,70 @@
-'use strict';
-
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require("path");
+const argv = require('minimist')(process.argv.slice(2));
 
 const projectName = "layout-manager";
 
-var options = {
-    entry: './src',
+let entries = ['./src/index.js'];
+let plugins = [];
+
+if(argv.env){
+   entries.push('./examples/src/index.js');
+}
+else {
+    plugins.push(new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('production')
+    }));
+    plugins.push(new webpack.optimize.UglifyJsPlugin({minimize: true}));
+}
+
+console.log(plugins);
+
+const options = {
+    entry: entries,
     output: {
         path: path.resolve(__dirname,'dist'),
-        filename: projectName+'.js',
+        filename: projectName + '.js',
         libraryTarget: 'umd',
         library: "LayoutManager"
     },
-    externals: {
-        // require("jquery") is external and available
-        //  on the global var jQuery
-        "jquery": "jQuery"
-    },
+    externals: [{
+        react: {
+            root: "React",
+            commonjs2: "react",
+            commonjs: "react",
+            amd: "react"
+        },
+        "react-dom": {
+            root: "ReactDOM",
+            commonjs2: "react-dom",
+            commonjs: "react-dom",
+            amd: "react-dom"
+        }
+    }],
     module: {
         rules: [
             {
+                test: /\.(css)$/,
+                use: [{
+                    loader: "style-loader"
+                }, {
+                    loader: "css-loader"
+                }]
+            },
+            {
                 test: /\.js$/,
-                include: [path.resolve(__dirname, "src/")],
+                exclude: path.resolve(__dirname, "node_modules/"),
                 use: {
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
-                        presets: ['es2015']
+                        presets: ['env', 'react']
                     }
                 }
             }
         ]
     },
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin({minimize: true})
-    ]
+    plugins: plugins
 };
-
 
 module.exports = options;

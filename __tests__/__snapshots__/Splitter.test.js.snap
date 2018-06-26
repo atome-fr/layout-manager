@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Splitter Component UI Render Test should render 1`] = `
+<div
+  className="splitter "
+  onMouseDown={[Function]}
+  onTouchStart={[Function]}
+>
+  <div
+    className="handle"
+  />
+</div>
+`;

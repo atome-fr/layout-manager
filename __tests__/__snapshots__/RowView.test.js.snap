@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RowView Component UI Render Test should render with the component passed in parameter 1`] = `
+<div
+  className="row"
+>
+  <View />
+</div>
+`;
