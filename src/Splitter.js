@@ -47,6 +47,7 @@ class Splitter extends Component {
             const offset = {x: newMousePos.x - this.mousePos.x, y: newMousePos.y - this.mousePos.y};
             this.mousePos = newMousePos;
             this.props.onChange(offset, this.el);
+            document.dispatchEvent(new Event("resizeComponents"));
         }
     }
 

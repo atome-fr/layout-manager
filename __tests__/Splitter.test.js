@@ -60,6 +60,9 @@ describe('Splitter Component', () => {
         });
 
         it('should handle the move position and call a callback method', () => {
+            const oldVal = document.dispatchEvent;
+            document.dispatchEvent = jest.fn();
+
             const handleOnChange = jest.fn();
 
             const wrapper = shallow(<Splitter onChange={handleOnChange}/>);
@@ -76,6 +79,9 @@ describe('Splitter Component', () => {
 
             expect(ev.preventDefault).toHaveBeenCalledTimes(1);
             expect(handleOnChange).toHaveBeenCalledTimes(1);
+            expect(document.dispatchEvent).toHaveBeenCalledTimes(1);
+
+            document.dispatchEvent = oldVal;
         });
 
         it('should remove some listeners on the document', () => {

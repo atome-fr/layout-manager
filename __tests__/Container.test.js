@@ -192,6 +192,9 @@ describe('Container Component', () => {
             const oldVal2 = Container.prototype._applyRatios;
             Container.prototype._applyRatios = jest.fn();
 
+            const oldVal3 = document.dispatchEvent;
+            document.dispatchEvent = jest.fn();
+
             const wrapper = shallow(<Container type="column" views={[]}/>);
 
             wrapper.instance().container = {
@@ -201,13 +204,18 @@ describe('Container Component', () => {
                 length: 4
             };
 
-            wrapper.instance()._computeSize();
+            wrapper.instance()._computeSize(true);
 
             expect(wrapper.instance().ratios).toEqual([0.25, 0.25, 0.25, 0.25]);
             expect(Container.prototype._applyRatios).toHaveBeenCalledTimes(1);
+            expect(document.dispatchEvent).toHaveBeenCalledTimes(0);
             expect(Container.prototype._applyRatios).toHaveBeenCalledWith(300);
 
+            wrapper.instance()._computeSize();
+            expect(document.dispatchEvent).toHaveBeenCalledTimes(1);
+
             Container.prototype._applyRatios = oldVal2;
+            document.dispatchEvent = oldVal3;
         });
 
         it('should call the _generateRender method and return the correct array of ColumnView components to render', () => {

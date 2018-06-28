@@ -20,6 +20,7 @@ class Container extends Component {
         super(props);
 
         this.handleSplitterChange = this.handleSplitterChange.bind(this);
+        this._computeSize = this._computeSize.bind(this);
 
         this.sliderSize = 10;
 
@@ -42,8 +43,8 @@ class Container extends Component {
      * Component lifecycle method
      */
     componentDidMount() {
-        this._computeSize();
-        window.addEventListener("resize", () => this._computeSize());
+        this._computeSize(true);
+        window.addEventListener("resize", this._computeSize);
     }
 
     /**
@@ -59,7 +60,7 @@ class Container extends Component {
      * Component lifecycle method
      */
     componentWillUnmount() {
-        window.removeEventListener("resize", () => this._computeSize());
+        window.removeEventListener("resize", this._computeSize);
     }
 
     /**
@@ -149,7 +150,7 @@ class Container extends Component {
      * Method for compute the size for each column
      * @private
      */
-    _computeSize() {
+    _computeSize(isInitialization = false) {
         this.ratios = [];
 
         const sizeAvailable = this.container[`client${this.sizePropName.charAt(0).toUpperCase() + this.sizePropName.slice(1)}`] - (this.splitters.length * this.sliderSize);
@@ -163,6 +164,10 @@ class Container extends Component {
         }, 0);
 
         this._applyRatios(sizeAvailable);
+
+        if(typeof(isInitialization) !== "boolean" || !isInitialization) {
+            document.dispatchEvent(new Event("resizeComponents"));
+        }
     }
 
     /**
