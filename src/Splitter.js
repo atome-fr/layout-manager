@@ -39,8 +39,10 @@ class Splitter extends Component {
         ev.preventDefault();
 
         let newMousePos = undefined;
-        if ((ev.clientX && ev.clientY) || (ev.touches && ev.touches.length > 0)) {
-            newMousePos = {x: ev.clientX || ev.touches[0].clientX, y: ev.clientY || ev.touches[0].clientY};
+        if ((ev.clientX !== undefined && ev.clientY !== undefined) || (ev.touches && ev.touches.length > 0)) {
+            newMousePos = {
+                x: (ev.clientX !== undefined) ? ev.clientX : ev.touches[0].clientX,
+                y: (ev.clientY !== undefined) ? ev.clientY : ev.touches[0].clientY};
         }
 
         if(newMousePos) {
