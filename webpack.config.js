@@ -17,8 +17,6 @@ else {
     plugins.push(new webpack.optimize.UglifyJsPlugin({minimize: true}));
 }
 
-console.log(plugins);
-
 const options = {
     entry: entries,
     output: {
