@@ -44,7 +44,7 @@
     "docs": "jsdoc -c jsdoc.json -r",
     "preversion": "npm run clean && npm test",
     "version": "npm run build && npm run lib",
-    "postversion": "npm publish && git push && git push --tags"
+    "postversion": "git push && git push --tags"
   },
   "author": {
     "name": "Thomas CHEVALIER",
