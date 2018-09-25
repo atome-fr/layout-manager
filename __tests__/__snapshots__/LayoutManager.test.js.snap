@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LayoutManager Component UI Render Test should render with all the children component 1`] = `
+<div
+  className="containerView"
+>
+  <div>
+    View 1
+  </div>
+</div>
+`;

@@ -1,1 +1,2 @@
-export ContainerView from './ContainerView';
+export LayoutManager from './LayoutManager';
+export SplitLayout from './SplitLayout';

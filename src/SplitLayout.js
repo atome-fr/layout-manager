@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
-// Import components
-import ColumnView from './ColumnView';
-import RowView from './RowView';
+// Import component
+import ContainerView from './ContainerView';
 import Splitter from './Splitter';
+import ReactDOM from "react-dom";
 
 /**
- * Class used to manage a container of components (columns or rows)
+ * Class used to manage different columns and rows
  * @class
  */
-class Container extends Component {
+export default class SplitLayout extends Component {
 
     /**
      * Override the constructor
@@ -27,15 +26,17 @@ class Container extends Component {
         this.splitters = [];
         this.children = [];
 
-        if (props.type === 'column') {
+        if (props.split === 'vertical') {
             this.sizePropName = "width";
             this.offsetPropName = "x";
-            this.splitterType = "vertical";
+            this.splitterType = props.split;
+            this.containerType = "column";
         }
-        else if (props.type === 'row') {
+        else if (props.split === 'horizontal') {
             this.sizePropName = "height";
             this.offsetPropName = "y";
-            this.splitterType = "horizontal";
+            this.splitterType = props.split;
+            this.containerType = "row";
         }
     }
 
@@ -165,13 +166,17 @@ class Container extends Component {
 
         this._applyRatios(sizeAvailable);
 
-        if(typeof(isInitialization) !== "boolean" || !isInitialization) {
+        if (typeof(isInitialization) !== "boolean" || !isInitialization) {
             document.dispatchEvent(new Event("resizeComponents"));
         }
     }
 
+    _checkChildVisibility(child) {
+        return typeof child.type === "function" && ((child.type.name != "SplitLayout" && child.props.visible) || child.type.name === "SplitLayout");
+    }
+
     /**
-     * Method for generate the render with the right numbers of columns and splitters
+     * Method for generate the render
      * @returns {Array}
      * @private
      */
@@ -183,37 +188,13 @@ class Container extends Component {
         this.children = [];
 
         let index = 0;
-        this.props.views.forEach((view) => {
-            if (view.visible) {
+        React.Children.forEach(this.props.children, child => {
+            if ((typeof child.type === "function" && child.type.name === "SplitLayout" && this.childShouldBeDisplay(child)) || child.props.visible) {
                 if (index > 0) {
-                    toRender.push(<Splitter ref={(splitter) => {
-                        if (splitter) {
-                            this.splitters.push(splitter);
-                        }
-                    }}
-                                            key={'splitter_' + this.props.type + '_' + index}
-                                            type={this.splitterType}
-                                            onChange={(offset, node) => this.handleSplitterChange(offset, node)}/>);
+                    toRender.push(this._generateSplitter(index));
                 }
 
-                if (this.props.type === "column") {
-                    toRender.push(<ColumnView ref={(col) => {
-                        if (col) {
-                            this.children.push(col);
-                        }
-                    }}
-                                              key={this.props.type + '_' + index}
-                                              views={view.components}/>);
-                }
-                else if (this.props.type === "row") {
-                    toRender.push(<RowView ref={(row) => {
-                        if (row) {
-                            this.children.push(row);
-                        }
-                    }}
-                                           key={'row_' + index}
-                                           view={view}/>);
-                }
+                toRender.push(this._generateContainerView(index, child));
 
                 index++;
             }
@@ -223,11 +204,62 @@ class Container extends Component {
     }
 
     /**
+     * Method for check if the component got on children visible
+     * @param child
+     */
+    childShouldBeDisplay(child) {
+        const children = React.Children.toArray(child.props.children);
+        for (let child of children) {
+            let childShouldBeDisplay = false;
+            if ((typeof child.type === "function" && child.type.name === "SplitLayout")) {
+                childShouldBeDisplay = this.childShouldBeDisplay(child);
+            }
+
+            if (child.props.visible || childShouldBeDisplay) return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Method for generate the splitter component
+     * @param index The index of the current child
+     * @returns {*}
+     * @private
+     */
+    _generateSplitter(index) {
+        return <Splitter ref={splitter => {
+            if (splitter) this.splitters.push(splitter);
+        }}
+                         key={'splitter_' + this.props.split + '_' + index}
+                         type={this.splitterType}
+                         onChange={(offset, node) => this.handleSplitterChange(offset, node)}/>
+    }
+
+    /**
+     * Method for generate the correct container component
+     * @param index The index of the current child
+     * @param child The child to render
+     * @returns {*}
+     * @private
+     */
+    _generateContainerView(index, child) {
+        return <ContainerView ref={col => {
+            if (col) this.children.push(col);
+        }}
+                              key={this.containerType + '_' + index}
+                              type={this.containerType}
+        >
+            {child}
+        </ContainerView>
+    }
+
+    /**
      * Method for render the components
      * @returns {*}
      */
     render() {
-        const classNames = (this.props.type === "column" ? "container parent" : "container");
+        const classNames = (this.props.split === "vertical" ? "container parent" : "container");
 
         return (
             <div ref={(el) => this.container = el}
@@ -239,5 +271,3 @@ class Container extends Component {
         );
     }
 }
-
-export default Container;

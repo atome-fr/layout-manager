@@ -4,7 +4,7 @@ import React, {Component} from 'react';
  * Class used to manage a splitter
  * @class
  */
-class Splitter extends Component {
+export default class Splitter extends Component {
 
     /**
      * Override constructor
@@ -79,5 +79,3 @@ class Splitter extends Component {
         );
     }
 }
-
-export default Splitter;

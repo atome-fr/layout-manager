@@ -39,6 +39,7 @@
     "test": "jest",
     "build": "webpack",
     "build-examples": "webpack --env=examples",
+    "watch-examples": "webpack --progress --colors --watch --env=examples",
     "lib": "babel src --out-dir lib -s",
     "docs": "jsdoc -c jsdoc.json -r",
     "preversion": "npm run clean && npm test",
@@ -72,7 +73,7 @@
     ],
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/lib/**/*.{js,jsx}"
+      "src/*.{js,jsx}"
     ],
     "coverageDirectory": "out/coverage/",
     "coverageReporters": [

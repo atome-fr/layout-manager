@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {ContainerView} from "../../src/index";
+import {LayoutManager, SplitLayout} from "../../src/index";
 
 /**
  * Class used for the examples
  * @class
  */
-class ExamplesContainer extends Component {
+export default class ExamplesContainer extends Component {
 
     /**
      * Override constructor
@@ -15,33 +15,9 @@ class ExamplesContainer extends Component {
         super(props);
 
         this.state = {
-            views: [
-                {
-                    visible: true,
-                    components: [
-                        {
-                            name: 'component 1',
-                            visible: true,
-                            component: undefined
-                        },
-                        {
-                            name: 'component 2',
-                            visible: true,
-                            component: undefined
-                        }
-                    ]
-                },
-                {
-                    visible: true,
-                    components: [
-                        {
-                            name: 'component 3',
-                            visible: true,
-                            component: undefined
-                        }
-                    ]
-                }
-            ],
+            viewOneIsVisible: true,
+            viewTwoIsVisible: true,
+            viewThreeIsVisible: true,
             showDemoButtons: false
         }
     }
@@ -76,15 +52,35 @@ class ExamplesContainer extends Component {
     _generateButtons() {
         let toRender = [];
 
-        this.state.views.forEach((column, colIndex) => {
-            column.components.forEach((component, compIndex) => {
-                toRender.push(<button id={"toggle" + component.name.charAt(0).toUpperCase() + component.name.slice(1)}
-                                      key={'button_' + colIndex + '_' + compIndex}
-                                      onClick={() => this.handleToggleComponent(colIndex, compIndex)}>
-                    Toggle {component.name}
-                </button>);
-            });
-        });
+        toRender.push(<button id={'toggle_view_one'}
+                              key={'button_toggle_view_one'}
+                              onClick={() =>
+                                  this.setState((prevState, props) => {
+                                      return {viewOneIsVisible: !prevState.viewOneIsVisible};
+                                  })
+                              }>
+            Toggle View 1
+        </button>);
+
+        toRender.push(<button id={'toggle_view_two'}
+                              key={'button_toggle_view_two'}
+                              onClick={() =>
+                                  this.setState((prevState, props) => {
+                                      return {viewTwoIsVisible: !prevState.viewTwoIsVisible};
+                                  })
+                              }>
+            Toggle View 2
+        </button>);
+
+        toRender.push(<button id={'toggle_view_three'}
+                              key={'button_toggle_view_three'}
+                              onClick={() =>
+                                  this.setState((prevState, props) => {
+                                      return {viewThreeIsVisible: !prevState.viewThreeIsVisible};
+                                  })
+                              }>
+            Toggle View 3
+        </button>);
 
         return toRender;
     }
@@ -111,7 +107,15 @@ class ExamplesContainer extends Component {
                     </button>
                 </div>
 
-                <ContainerView views={this.state.views}/>
+                <LayoutManager>
+                    <SplitLayout split="vertical">
+                        <SplitLayout split="horizontal">
+                            <div visible={this.state.viewOneIsVisible}>View 1</div>
+                            <div visible={this.state.viewTwoIsVisible}>View 2</div>
+                        </SplitLayout>
+                        <div visible={this.state.viewThreeIsVisible}>View 3</div>
+                    </SplitLayout>
+                </LayoutManager>
 
                 {this.state.showDemoButtons &&
                 <div style={buttonsDivStyle}>
@@ -123,5 +127,3 @@ class ExamplesContainer extends Component {
     }
 
 }
-
-export default ExamplesContainer;

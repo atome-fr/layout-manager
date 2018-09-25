@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SplitLayout Component UI Render Test should render with SplitLayout child component 1`] = `
+<div
+  className="container"
+>
+  <ContainerView
+    key="row_0"
+    type="row"
+  >
+    <div
+      visible={true}
+    >
+      View 1
+    </div>
+  </ContainerView>
+  <Splitter
+    key="splitter_horizontal_1"
+    onChange={[Function]}
+    type="horizontal"
+  />
+  <ContainerView
+    key="row_1"
+    type="row"
+  >
+    <div
+      visible={true}
+    >
+      View 2
+    </div>
+  </ContainerView>
+</div>
+`;

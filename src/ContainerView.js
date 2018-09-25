@@ -1,19 +1,34 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-// Import components
-import Container from './Container';
+// Import component
+import View from './View';
 
 /**
- * Method for render a container of columns
+ * Class used to manage a container view
+ * @class
  */
-function ContainerView(props) {
-    return (
-        <div className="containerView">
+export default class ContainerView extends Component {
 
-            <Container type="column" views={props.views}/>
-
-        </div>
-    );
+    /**
+     * Method for render the components
+     * @returns {*}
+     */
+    render() {
+        return (
+            <div className={this.props.type}>
+                {
+                    React.Children.map(this.props.children, child => {
+                        if (child.props.visible && child.type === "div") {
+                            return <View>
+                                {child}
+                            </View>
+                        }
+                        else if (child.type !== "div") {
+                            return child
+                        }
+                    })
+                }
+            </div>
+        );
+    }
 }
-
-export default ContainerView;
