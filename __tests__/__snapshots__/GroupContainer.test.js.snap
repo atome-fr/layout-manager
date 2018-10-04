@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupContainer Component UI Render Test should render with GroupContainer child component 1`] = `
+<div
+  style={
+    Object {
+      "height": "50%",
+      "width": "100%",
+    }
+  }
+>
+  <ContainerView
+    key="row_0"
+    type="row"
+  >
+    <div
+      visible={true}
+    >
+      View 1
+    </div>
+  </ContainerView>
+  <Splitter
+    key="splitter_group_horizontal_1"
+    onChange={[Function]}
+    type="horizontal"
+  />
+  <ContainerView
+    key="row_1"
+    type="row"
+  >
+    <div
+      visible={true}
+    >
+      View 2
+    </div>
+  </ContainerView>
+</div>
+`;

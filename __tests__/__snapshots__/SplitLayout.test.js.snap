@@ -4,30 +4,22 @@ exports[`SplitLayout Component UI Render Test should render with SplitLayout chi
 <div
   className="container"
 >
-  <ContainerView
-    key="row_0"
-    type="row"
+  <GroupContainer
+    key="group_container_0"
+    onResize={[Function]}
+    size={null}
+    split="horizontal"
   >
     <div
       visible={true}
     >
       View 1
     </div>
-  </ContainerView>
-  <Splitter
-    key="splitter_horizontal_1"
-    onChange={[Function]}
-    type="horizontal"
-  />
-  <ContainerView
-    key="row_1"
-    type="row"
-  >
     <div
       visible={true}
     >
       View 2
     </div>
-  </ContainerView>
+  </GroupContainer>
 </div>
 `;

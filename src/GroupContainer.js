@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // Import component
-import GroupContainer from './GroupContainer';
+import ContainerView from './ContainerView';
 import Splitter from './Splitter';
 import ReactDOM from "react-dom";
 
@@ -9,10 +9,10 @@ import ReactDOM from "react-dom";
 import Util from './helpers/util';
 
 /**
- * Class used to manage different columns and rows
+ * Class used to manage a group of containers
  * @class
  */
-export default class SplitLayout extends Component {
+export default class GroupContainer extends Component {
 
     /**
      * Override the constructor
@@ -22,7 +22,6 @@ export default class SplitLayout extends Component {
         super(props);
 
         this.handleSplitterChange = this.handleSplitterChange.bind(this);
-        this.handleResize = this.handleResize.bind(this);
         this._computeSize = this._computeSize.bind(this);
 
         this.sliderSize = 10;
@@ -125,33 +124,7 @@ export default class SplitLayout extends Component {
 
         this.ratios = newRatios;
 
-        this.handleResize();
-    }
-
-    /**
-     * Method for send the new size of all the components
-     * @private
-     */
-    handleResize() {
-        let newSize = {
-            globalRatios: null,
-            group0: null,
-            group1: null
-        };
-
-        if (this.children.length === 2) {
-            newSize.globalRatios = this.ratios;
-        }
-
-        if (this.children.length >= 1 && this.children[0].children.length === 2) {
-            newSize.group0 = this.children[0].ratios;
-        }
-
-        if (this.children.length >= 2 && this.children[1].children.length === 2) {
-            newSize.group1 = this.children[1].ratios;
-        }
-
-        this.props.onResize(newSize);
+        this.props.onResize();
     }
 
     /**
@@ -173,7 +146,7 @@ export default class SplitLayout extends Component {
         this.ratios = [1];
 
         if (this.children.length === 2 && this.props.size) {
-            this.ratios = this.props.size.globalRatios;
+            this.ratios = this.props.size;
         }
         else if (this.children.length === 2 && !this.props.size) {
             this.ratios = [0.5, 0.5];
@@ -199,27 +172,16 @@ export default class SplitLayout extends Component {
         this.children = [];
 
         let index = 0;
-        let childrenGroupCount = 0;
-        let childrenGroup = [];
 
         React.Children.forEach(this.props.children, (child, i) => {
-            childrenGroup.push(child);
-            childrenGroupCount++;
-
-            if (childrenGroupCount === 2 && Util.checkGroupVisibility(childrenGroup) || i === (this.props.children.length - 1) && Util.checkGroupVisibility(childrenGroup)) {
+            if ((typeof child.type === "function" && child.type.name === "SplitLayout" && Util.childShouldBeDisplay(child)) || child.props.visible) {
                 if (index > 0) {
                     toRender.push(this._generateSplitter(index));
                 }
 
-                toRender.push(this._generateGroupContainer(index, childrenGroup));
+                toRender.push(this._generateContainerView(index, child));
 
-                childrenGroup = [];
                 index++;
-                childrenGroupCount = 0;
-            }
-            else if (childrenGroupCount === 2 && !Util.checkGroupVisibility(childrenGroup)) {
-                childrenGroup = [];
-                childrenGroupCount = 0;
             }
         });
 
@@ -236,33 +198,27 @@ export default class SplitLayout extends Component {
         return <Splitter ref={splitter => {
             if (splitter) this.splitters.push(splitter);
         }}
-                         key={'splitter_layout_' + this.props.split + '_' + index}
+                         key={'splitter_group_' + this.props.split + '_' + index}
                          type={this.splitterType}
                          onChange={(offset, node) => this.handleSplitterChange(offset, node)}/>
     }
 
     /**
-     * Method for generate a group container of two children
-     * @param index The index of the component
-     * @param children The children to render
+     * Method for generate the correct container component
+     * @param index The index of the current child
+     * @param child The child to render
      * @returns {*}
      * @private
      */
-    _generateGroupContainer(index, children) {
-        let groupSize = null;
-        if (this.props.size) {
-            groupSize = this.props.size['group' + index] || null;
-        }
-
-        return <GroupContainer ref={group => {
-            if (group) this.children.push(group);
+    _generateContainerView(index, child) {
+        return <ContainerView ref={col => {
+            if (col) this.children.push(col);
         }}
-                               key={'group_container_' + index}
-                               split={this.props.split}
-                               size={groupSize}
-                               onResize={this.handleResize}>
-            {children}
-        </GroupContainer>
+                              key={this.containerType + '_' + index}
+                              type={this.containerType}
+        >
+            {child}
+        </ContainerView>
     }
 
     /**
@@ -270,11 +226,9 @@ export default class SplitLayout extends Component {
      * @returns {*}
      */
     render() {
-        const classNames = (this.props.split === "vertical" ? "container parent" : "container");
-
         return (
             <div ref={(el) => this.container = el}
-                 className={classNames}>
+            style={{width:'100%', height:'50%'}}>
 
                 {this._generateRender()}
 

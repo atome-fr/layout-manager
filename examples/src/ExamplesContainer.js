@@ -18,30 +18,9 @@ export default class ExamplesContainer extends Component {
             viewOneIsVisible: true,
             viewTwoIsVisible: true,
             viewThreeIsVisible: true,
+            size: null,
             showDemoButtons: false
         }
-    }
-
-    /**
-     * Method called when a button for toggle a component is pressed
-     * @param colIndex The column's index of the component
-     * @param compIndex The component's index of the component
-     */
-    handleToggleComponent(colIndex, compIndex) {
-        let views = this.state.views.concat();
-        views[colIndex].components[compIndex].visible = !this.state.views[colIndex].components[compIndex].visible;
-
-        // Check if column had to be visible
-        let columnHadToBeVisible = false;
-        for (let i = 0; i < this.state.views[colIndex].components.length; i++) {
-            if (this.state.views[colIndex].components[i].visible) {
-                columnHadToBeVisible = true;
-                break;
-            }
-        }
-        this.state.views[colIndex].visible = columnHadToBeVisible;
-
-        this.setState(views);
     }
 
     /**
@@ -85,6 +64,10 @@ export default class ExamplesContainer extends Component {
         return toRender;
     }
 
+    handleResize(newSize) {
+        this.setState({size: newSize});
+    }
+
     /**
      * Method for render the components
      * @returns {*}
@@ -108,11 +91,9 @@ export default class ExamplesContainer extends Component {
                 </div>
 
                 <LayoutManager>
-                    <SplitLayout split="vertical">
-                        <SplitLayout split="horizontal">
-                            <div visible={this.state.viewOneIsVisible}>View 1</div>
-                            <div visible={this.state.viewTwoIsVisible}>View 2</div>
-                        </SplitLayout>
+                    <SplitLayout split="horizontal" size={this.state.size} onResize={newSize => this.handleResize(newSize)}>
+                        <div visible={this.state.viewOneIsVisible}>View 1</div>
+                        <div visible={this.state.viewTwoIsVisible}>View 2</div>
                         <div visible={this.state.viewThreeIsVisible}>View 3</div>
                     </SplitLayout>
                 </LayoutManager>
