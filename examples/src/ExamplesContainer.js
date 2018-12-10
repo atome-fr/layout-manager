@@ -18,8 +18,10 @@ export default class ExamplesContainer extends Component {
             viewOneIsVisible: true,
             viewTwoIsVisible: true,
             viewThreeIsVisible: true,
-            size: null,
-            showDemoButtons: false
+            size_group1: null,
+            size_group2: null,
+            showDemoButtons: false,
+            direction: 'vertical'
         }
     }
 
@@ -64,8 +66,10 @@ export default class ExamplesContainer extends Component {
         return toRender;
     }
 
-    handleResize(newSize) {
-        this.setState({size: newSize});
+    handleResize(name, newSize) {
+        let newState = {};
+        newState[name] = newSize;
+        this.setState(newState);
     }
 
     /**
@@ -76,6 +80,7 @@ export default class ExamplesContainer extends Component {
         const rootStyle = {width: '100%', height: '100%'};
         const demosButtonsStyle = {position: 'absolute', zIndex: '20'};
         const buttonsDivStyle = {position: 'absolute', bottom: '0'};
+        const viewStyle = {textAlign: 'center'};
 
         return (
             <div style={rootStyle}>
@@ -88,13 +93,19 @@ export default class ExamplesContainer extends Component {
                         this.setState({showDemoButtons: true})
                     }}>Demo drag splitter + show/hide components
                     </button>
+                    <button onClick={() => {
+                        this.setState({direction: this.state.direction === 'vertical' ? 'horizontal' : 'vertical'})
+                    }}>Toggle direction
+                    </button>
                 </div>
 
                 <LayoutManager>
-                    <SplitLayout split="horizontal" size={this.state.size} onResize={newSize => this.handleResize(newSize)}>
-                        <div visible={this.state.viewOneIsVisible}>View 1</div>
-                        <div visible={this.state.viewTwoIsVisible}>View 2</div>
-                        <div visible={this.state.viewThreeIsVisible}>View 3</div>
+                    <SplitLayout split={this.state.direction} size={this.state.size_group1} onResize={newSize => this.handleResize('size_group1', newSize)}>
+                        <div style={viewStyle} visible={this.state.viewOneIsVisible}>View 1</div>
+                        <SplitLayout split={this.state.direction} size={this.state.size_group2} onResize={newSize => this.handleResize('size_group2', newSize)}>
+                            <div style={viewStyle} visible={this.state.viewTwoIsVisible}>View 2</div>
+                            <div style={viewStyle} visible={this.state.viewThreeIsVisible}>View 3</div>
+                        </SplitLayout>
                     </SplitLayout>
                 </LayoutManager>
 

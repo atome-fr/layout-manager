@@ -1,25 +1,87 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SplitLayout Component UI Render Test should render with SplitLayout child component 1`] = `
+exports[`SplitLayout Component UI Render Test should render SplitLayout with one child hidden 1`] = `
 <div
   className="container"
 >
-  <GroupContainer
-    key="group_container_0"
-    onResize={[Function]}
-    size={null}
-    split="horizontal"
+  <ContainerView
+    key="row_1"
+    ratio={1}
+    type="row"
+  >
+    <div
+      visible={true}
+    >
+      View 2
+    </div>
+  </ContainerView>
+</div>
+`;
+
+exports[`SplitLayout Component UI Render Test should render horizontal SplitLayout 1`] = `
+<div
+  className="container"
+>
+  <ContainerView
+    key="row_0"
+    ratio={0.2}
+    type="row"
   >
     <div
       visible={true}
     >
       View 1
     </div>
+  </ContainerView>
+  <Splitter
+    key="splitter_layout_horizontal_0"
+    onChange={[Function]}
+    type="horizontal"
+  />
+  <ContainerView
+    key="row_1"
+    ratio={0.8}
+    type="row"
+  >
     <div
       visible={true}
     >
       View 2
     </div>
-  </GroupContainer>
+  </ContainerView>
+</div>
+`;
+
+exports[`SplitLayout Component UI Render Test should render vertical SplitLayout 1`] = `
+<div
+  className="container"
+>
+  <ContainerView
+    key="row_0"
+    ratio={0.5}
+    type="row"
+  >
+    <div
+      visible={true}
+    >
+      View 1
+    </div>
+  </ContainerView>
+  <Splitter
+    key="splitter_layout_horizontal_0"
+    onChange={[Function]}
+    type="horizontal"
+  />
+  <ContainerView
+    key="row_1"
+    ratio={0.5}
+    type="row"
+  >
+    <div
+      visible={true}
+    >
+      View 2
+    </div>
+  </ContainerView>
 </div>
 `;

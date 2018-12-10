@@ -14,8 +14,14 @@ export default class ContainerView extends Component {
      * @returns {*}
      */
     render() {
+        let style = {};
+        if (this.props.type === 'row'){
+            style['height'] = this.props.ratio * 100 + "%";
+        } else{
+            style['width'] = this.props.ratio * 100 + "%";
+        }
         return (
-            <div className={this.props.type}>
+            <div className={this.props.type} style={style}>
                 {
                     React.Children.map(this.props.children, child => {
                         if (child.props.visible && child.type === "div") {

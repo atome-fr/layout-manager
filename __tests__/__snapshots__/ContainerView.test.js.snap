@@ -1,8 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ContainerView Component UI Render Test should render with the ContainerView component 1`] = `
+exports[`ContainerView Component UI Render Test should render with the ContainerView component in column 1`] = `
 <div
   className="column"
+  style={
+    Object {
+      "width": "20%",
+    }
+  }
+>
+  <View
+    key=".0"
+  >
+    <div
+      visible="true"
+    />
+  </View>
+</div>
+`;
+
+exports[`ContainerView Component UI Render Test should render with the ContainerView component in row 1`] = `
+<div
+  className="row"
+  style={
+    Object {
+      "height": "50%",
+    }
+  }
 >
   <View
     key=".0"

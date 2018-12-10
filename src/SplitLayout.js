@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // Import component
-import GroupContainer from './GroupContainer';
+import ContainerView from './ContainerView';
 import Splitter from './Splitter';
 import ReactDOM from "react-dom";
 
@@ -22,25 +22,42 @@ export default class SplitLayout extends Component {
         super(props);
 
         this.handleSplitterChange = this.handleSplitterChange.bind(this);
-        this.handleResize = this.handleResize.bind(this);
-        this._computeSize = this._computeSize.bind(this);
-
         this.sliderSize = 10;
-
-        this.splitters = [];
-        this.children = [];
-
-        if (props.split === 'vertical') {
-            this.sizePropName = "width";
-            this.offsetPropName = "x";
-            this.splitterType = props.split;
-            this.containerType = "column";
+    }
+    
+    /**
+     * Get the name of the size property depending on the the spliter direction
+     * @return {String} "width" or "height"
+     */
+    getPropSize() {
+        if(this.props.split === 'vertical'){
+            return 'width';
+        } else if (this.props.split === 'horizontal'){
+            return 'height';
         }
-        else if (props.split === 'horizontal') {
-            this.sizePropName = "height";
-            this.offsetPropName = "y";
-            this.splitterType = props.split;
-            this.containerType = "row";
+    }
+
+    /**
+     * Get the name of the offset property depending on the the spliter direction
+     * @return {String} "x" or "y"
+     */
+    getPropOffset() {
+        if(this.props.split === 'vertical'){
+            return 'x';
+        } else if (this.props.split === 'horizontal'){
+            return 'y';
+        }
+    }
+
+    /**
+     * Get the name of the ContainerView type depending on the the spliter direction
+     * @return {String} "colum" or "row"
+     */
+    getContainerType() {
+        if(this.props.split === 'vertical'){
+            return 'column';
+        } else if (this.props.split === 'horizontal'){
+            return 'row';
         }
     }
 
@@ -48,24 +65,18 @@ export default class SplitLayout extends Component {
      * Component lifecycle method
      */
     componentDidMount() {
-        this._computeSize(true);
-        window.addEventListener("resize", this._computeSize);
-    }
-
-    /**
-     * Component lifecycle method
-     */
-    componentDidUpdate() {
-        if (this.children.length > 0) {
-            this._computeSize();
+        if (this.props.children.length !== 2) {
+            throw new Error("SplitLayout must have extactly 2 children");
         }
     }
 
     /**
      * Component lifecycle method
      */
-    componentWillUnmount() {
-        window.removeEventListener("resize", this._computeSize);
+    componentDidUpdate() {
+        if (this.props.children.length !== 2) {
+            throw new Error("SplitLayout must have extactly 2 children");
+        }
     }
 
     /**
@@ -74,48 +85,36 @@ export default class SplitLayout extends Component {
      * @param splitterNode The splitter node
      */
     handleSplitterChange(splitterOffset, splitterNode) {
-        const sizeAvailable = this.container[`client${this.sizePropName.charAt(0).toUpperCase() + this.sizePropName.slice(1)}`] - (this.splitters.length * this.sliderSize);
-        const ratioOffset = splitterOffset[this.offsetPropName] / sizeAvailable;
-        const splitterIndex = Util.searchSplitterIndex(this.splitters, splitterNode);
+        const propSize = this.getPropSize();
+        const sizeAvailable = this.container[`client${propSize.charAt(0).toUpperCase() + propSize.slice(1)}`] - this.sliderSize;
+        const ratioOffset = splitterOffset[this.getPropOffset()] / sizeAvailable;
 
-        this._updateRatios(splitterIndex, ratioOffset);
-
-        this._applyRatios();
+        this._updateRatios(ratioOffset);
     }
 
     /**
      * Method for update the ratio for the view components
      * @param index The index of the ratio to change
-     * @param ratio The new ratio to change
+     * @param ratioOffset The new ratio to change
      * @private
      */
-    _updateRatios(index, ratio) {
+    _updateRatios(ratioOffset) {
         const newRatios = this.ratios.slice();
-
-        let ratioToAdd = ratio;
-        let indexToAdd = index;
-        while (ratioToAdd !== 0 && indexToAdd >= 0) {
-            if (newRatios[indexToAdd] + ratioToAdd > 0) {
-                newRatios[indexToAdd] += ratioToAdd;
-                ratioToAdd = 0;
-            } else {
-                ratioToAdd += newRatios[indexToAdd];
-                newRatios[indexToAdd] = 0;
-                indexToAdd--;
-            }
+        
+        newRatios[0] += ratioOffset;
+        newRatios[1] -= ratioOffset;
+        
+        if (newRatios[0] < 0){
+            newRatios[0] = 0;
         }
-
-        let ratioToRem = ratio;
-        let indexToRem = index + 1;
-        while (ratioToRem !== 0 && indexToRem < this.children.length) {
-            if (newRatios[indexToRem] - ratioToRem > 0) {
-                newRatios[indexToRem] -= ratioToRem;
-                ratioToRem = 0;
-            } else {
-                ratioToRem -= newRatios[indexToRem];
-                newRatios[indexToRem] = 0;
-                indexToRem++;
-            }
+        if (newRatios[0] > 1){
+            newRatios[0] = 1;
+        }
+        if (newRatios[1] < 0){
+            newRatios[1] = 0;
+        }
+        if (newRatios[1] > 1){
+            newRatios[1] = 1;
         }
 
         const sumRatios = newRatios.reduce((acc, val) => acc + val, 0);
@@ -123,67 +122,7 @@ export default class SplitLayout extends Component {
             return;
         }
 
-        this.ratios = newRatios;
-
-        this.handleResize();
-    }
-
-    /**
-     * Method for send the new size of all the components
-     * @private
-     */
-    handleResize() {
-        let newSize = {
-            globalRatios: null,
-            group0: null,
-            group1: null
-        };
-
-        if (this.children.length === 2) {
-            newSize.globalRatios = this.ratios;
-        }
-
-        if (this.children.length >= 1 && this.children[0].children.length === 2) {
-            newSize.group0 = this.children[0].ratios;
-        }
-
-        if (this.children.length >= 2 && this.children[1].children.length === 2) {
-            newSize.group1 = this.children[1].ratios;
-        }
-
-        this.props.onResize(newSize);
-    }
-
-    /**
-     * Method for apply the ratio to the components
-     * @private
-     */
-    _applyRatios() {
-        for (let i = 0; i < this.children.length; i++) {
-            ReactDOM.findDOMNode(this.children[i]).style[this.sizePropName] = this.ratios[i] * 100 + '%';
-        }
-    }
-
-    /**
-     * Method for compute the size for each component
-     * @private
-     */
-    _computeSize(isInitialization = false) {
-
-        this.ratios = [1];
-
-        if (this.children.length === 2 && this.props.size) {
-            this.ratios = this.props.size.globalRatios;
-        }
-        else if (this.children.length === 2 && !this.props.size) {
-            this.ratios = [0.5, 0.5];
-        }
-
-        this._applyRatios();
-
-        if (typeof(isInitialization) !== "boolean" || !isInitialization) {
-            document.dispatchEvent(new Event("resizeComponents"));
-        }
+        this.props.onResize(newRatios);
     }
 
     /**
@@ -194,35 +133,43 @@ export default class SplitLayout extends Component {
     _generateRender() {
         let toRender = [];
 
-        // Reset array of refs
-        this.splitters = [];
-        this.children = [];
-
         let index = 0;
         let childrenGroupCount = 0;
         let childrenGroup = [];
+        let visibility = {};
+        if (this.props.children[0].type.name === 'SplitLayout') {
+            visibility.child1 = Util.checkGroupVisibility(this.props.children[0].props.children);
+        } else {
+            visibility.child1 = Util.checkChildVisibility(this.props.children[0]);
+        }
+        if (this.props.children[1].type.name === 'SplitLayout') {
+            visibility.child2 = Util.checkGroupVisibility(this.props.children[1].props.children);
+        } else {
+            visibility.child2 = Util.checkChildVisibility(this.props.children[1]);
+        }
 
-        React.Children.forEach(this.props.children, (child, i) => {
-            childrenGroup.push(child);
-            childrenGroupCount++;
-
-            if (childrenGroupCount === 2 && Util.checkGroupVisibility(childrenGroup) || i === (this.props.children.length - 1) && Util.checkGroupVisibility(childrenGroup)) {
-                if (index > 0) {
-                    toRender.push(this._generateSplitter(index));
-                }
-
-                toRender.push(this._generateGroupContainer(index, childrenGroup));
-
-                childrenGroup = [];
-                index++;
-                childrenGroupCount = 0;
+        this.ratios = null;
+        if (!visibility.child1){
+            if (!visibility.child2){
+                return toRender;
             }
-            else if (childrenGroupCount === 2 && !Util.checkGroupVisibility(childrenGroup)) {
-                childrenGroup = [];
-                childrenGroupCount = 0;
-            }
-        });
+            this.ratios = [0, 1];
+        }
+        else if (!visibility.child2){
+            this.ratios = [1, 0];
+        } else {
+            this.ratios = this.props.size ? this.props.size : [0.5, 0.5];
+        }
 
+        if(visibility.child1) {
+            toRender.push(this._generateContainerView(0, this.props.children[0], this.ratios[0]));
+        }
+        if(visibility.child1 && visibility.child2) {
+            toRender.push(this._generateSplitter(0));
+        }
+        if(visibility.child2) {
+            toRender.push(this._generateContainerView(1, this.props.children[1], this.ratios[1]));
+        }
         return toRender;
     }
 
@@ -233,36 +180,24 @@ export default class SplitLayout extends Component {
      * @private
      */
     _generateSplitter(index) {
-        return <Splitter ref={splitter => {
-            if (splitter) this.splitters.push(splitter);
-        }}
-                         key={'splitter_layout_' + this.props.split + '_' + index}
-                         type={this.splitterType}
-                         onChange={(offset, node) => this.handleSplitterChange(offset, node)}/>
+        return <Splitter key={'splitter_layout_' + this.props.split + '_' + index}
+                         type={this.props.split}
+                         onChange={this.handleSplitterChange}/>
     }
 
     /**
-     * Method for generate a group container of two children
-     * @param index The index of the component
-     * @param children The children to render
+     * Method for generate the correct container component
+     * @param index The index of the current child
+     * @param child The child to render
      * @returns {*}
      * @private
      */
-    _generateGroupContainer(index, children) {
-        let groupSize = null;
-        if (this.props.size) {
-            groupSize = this.props.size['group' + index] || null;
-        }
-
-        return <GroupContainer ref={group => {
-            if (group) this.children.push(group);
-        }}
-                               key={'group_container_' + index}
-                               split={this.props.split}
-                               size={groupSize}
-                               onResize={this.handleResize}>
-            {children}
-        </GroupContainer>
+    _generateContainerView(index, child, ratio) {
+        return <ContainerView key={this.getContainerType() + '_' + index}
+                              type={this.getContainerType()}
+                              ratio={ratio}>
+            {child}
+        </ContainerView>
     }
 
     /**
