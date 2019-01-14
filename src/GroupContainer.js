@@ -172,7 +172,8 @@ export default class GroupContainer extends Component {
         this.children = [];
 
         let index = 0;
-
+        const SplitLayout = require('./SplitLayout');
+        
         React.Children.forEach(this.props.children, (child, i) => {
             if ((typeof child.type === "function" && child.type === SplitLayout && Util.childShouldBeDisplay(child)) || child.props.visible) {
                 if (index > 0) {

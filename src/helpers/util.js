@@ -35,6 +35,7 @@ export default class Util {
      * @returns {boolean|*}
      */
     static checkChildVisibility(child) {
+        const SplitLayout = require('../SplitLayout');
         return ((child.type === 'div' || typeof child.type === 'function' && child.type !== SplitLayout) && child.props.visible)
             || (typeof child.type === 'function' && child.type === SplitLayout);
     }
@@ -55,6 +56,7 @@ export default class Util {
      * @param child
      */
     static childShouldBeDisplay(child) {
+        const SplitLayout = require('../SplitLayout');
         const children = React.Children.toArray(child.props.children);
         for (let child of children) {
             let childShouldBeDisplay = false;
