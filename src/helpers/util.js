@@ -35,8 +35,8 @@ export default class Util {
      * @returns {boolean|*}
      */
     static checkChildVisibility(child) {
-        return ((child.type === 'div' || typeof child.type === 'function' && child.type.name !== 'SplitLayout') && child.props.visible)
-            || (typeof child.type === 'function' && child.type.name === 'SplitLayout');
+        return ((child.type === 'div' || typeof child.type === 'function' && child.type !== SplitLayout) && child.props.visible)
+            || (typeof child.type === 'function' && child.type === SplitLayout);
     }
 
     /**
@@ -58,7 +58,7 @@ export default class Util {
         const children = React.Children.toArray(child.props.children);
         for (let child of children) {
             let childShouldBeDisplay = false;
-            if ((typeof child.type === "function" && child.type.name === "SplitLayout")) {
+            if ((typeof child.type === "function" && child.type === SplitLayout)) {
                 childShouldBeDisplay = Util.childShouldBeDisplay(child);
             }
 

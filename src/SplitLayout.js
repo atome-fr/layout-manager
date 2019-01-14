@@ -137,12 +137,12 @@ export default class SplitLayout extends Component {
         let childrenGroupCount = 0;
         let childrenGroup = [];
         let visibility = {};
-        if (this.props.children[0].type.name === 'SplitLayout') {
+        if (this.props.children[0].type === SplitLayout) {
             visibility.child1 = Util.checkGroupVisibility(this.props.children[0].props.children);
         } else {
             visibility.child1 = Util.checkChildVisibility(this.props.children[0]);
         }
-        if (this.props.children[1].type.name === 'SplitLayout') {
+        if (this.props.children[1].type === SplitLayout) {
             visibility.child2 = Util.checkGroupVisibility(this.props.children[1].props.children);
         } else {
             visibility.child2 = Util.checkChildVisibility(this.props.children[1]);
