@@ -49,7 +49,7 @@ describe('SplitLayout Component', () => {
         
         it('should raise an error when pass more than 2 children to the SplitLayout', () => {
             expect(() => {
-                const wrapper = mount(<SplitLayout split="horizontal">
+                mount(<SplitLayout split="horizontal">
                     <div visible={true}>View 1</div>
                     <div visible={true}>View 2</div>
                     <div visible={true}>View 3</div>

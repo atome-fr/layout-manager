@@ -5,7 +5,7 @@ exports[`ContainerView Component UI Render Test should render with the Container
   className="column"
   style={
     Object {
-      "width": "20%",
+      "width": "calc(20% - 5px)",
     }
   }
 >
@@ -24,7 +24,7 @@ exports[`ContainerView Component UI Render Test should render with the Container
   className="row"
   style={
     Object {
-      "height": "50%",
+      "height": "calc(50% - 5px)",
     }
   }
 >

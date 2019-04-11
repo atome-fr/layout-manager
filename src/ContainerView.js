@@ -16,9 +16,9 @@ export default class ContainerView extends Component {
     render() {
         let style = {};
         if (this.props.type === 'row'){
-            style['height'] = this.props.ratio * 100 + "%";
+            style['height'] = `calc(${this.props.ratio * 100}% - 5px)`;
         } else{
-            style['width'] = this.props.ratio * 100 + "%";
+            style['width'] = `calc(${this.props.ratio * 100}% - 5px)`;
         }
         return (
             <div className={this.props.type} style={style}>
