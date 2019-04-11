@@ -6,6 +6,7 @@ const projectName = "layout-manager";
 
 let entries = ['./src/index.js'];
 let plugins = [];
+let minimize = false;
 
 if(argv.env){
    entries.push('./examples/src/index.js');
@@ -14,7 +15,7 @@ else {
     plugins.push(new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production')
     }));
-    plugins.push(new webpack.optimize.UglifyJsPlugin({minimize: true}));
+    minimize = true;
 }
 
 const options = {
@@ -56,13 +57,16 @@ const options = {
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
-                        presets: ['env', 'react']
+                        presets: ['@babel/env', '@babel/react']
                     }
                 }
             }
         ]
     },
-    plugins: plugins
+    plugins: plugins,
+    optimization: {
+        minimize: minimize
+    }
 };
 
 module.exports = options;
